@@ -1,0 +1,26 @@
+angular.module('smart-table')
+       .directive('stCurrentExternalDataContext', stCurrentExternalDataContext);
+
+/* @ngInject */
+function stCurrentExternalDataContext() {
+    //DDO
+    return {
+        restrict: 'A',
+        require: 'stTable',
+        link: stCurrentExternalDataContextLinkFunc
+    };
+}
+
+/* @ngInject */
+function stCurrentExternalDataContextLinkFunc(scope, element, attrs, ctrl) {
+
+    scope.$watch(
+        // Current watch works by natural comparison "by-reference"
+        attrs.stCurrentExternalDataContext,
+
+        function (newValue, oldValue) {
+            if (newValue && newValue !== oldValue) {
+                ctrl.slice(0, ctrl.tableState().pagination.number); //smart-table main ctrl slice function that trigers a redraw on the first page
+            }
+        });
+}
